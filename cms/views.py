@@ -5,16 +5,19 @@ from .models import Pages
 # Create your views here.
 def mainPage(request):
     list = Pages.objects.all()
-    req = '<ul>'
+    response = '<ul><h2>'
     for item in list:
-        req = req + '<li><a ref=' + item.name + '</a>'
-    req = req + '</ul>'
-    return HttpResponse("<h1>Hi!, these are our contents managed:</h1>" + req)
+        print(item.name)
+        response = response + '<li><a href=http://localhost:8000/' + str(item.name) + ">" + item.name + '</a></li>'
+    response = response + '</ul></h2>'
+    response = "<h1>Hi!, these are our contents managed:</h1>" + response
+    return HttpResponse(response)
 
 def contentPage(request, identifier):
     print ("entra")
     try:
         object = Pages.objects.get(name = identifier)
-        return HttpResponse(object.page)
+        response = object.page + '<br><br><a href=http://localhost:8000/> Return to Main menu </a>'
+        return HttpResponse(response)
     except Pages.DoesNotExist:
         return HttpResponse("There are not pages for this object")
